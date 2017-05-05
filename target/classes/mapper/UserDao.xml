@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wdn.obf.dao.UserDAO">
+	<resultMap type="User" id="resultListUser">
+        <id column="u_id" property="uId" />
+        <result column="u_account" property="uAccount" />
+        <result column="u_pwd" property="uPwd" />
+        <result column="u_name" property="uName" />
+        <result column="u_street" property="uStreet" />
+        <result column="u_address" property="uAddress" />
+        <result column="u_phone" property="uPhone" />
+        <result column="u_power" property="uPower" />
+        <collection property="comments" ofType="cn.wdn.obf.entity.Comment" >
+        	<id column="co_id" jdbcType="INTEGER" property="coId" />
+    		<result column="co_content" jdbcType="VARCHAR" property="coContent" />
+    		<result column="co_date" jdbcType="VARCHAR" property="coDate" />
+    		<result column="co_point" jdbcType="INTEGER" property="coPoint" />
+        </collection>
+        <collection property="orders" ofType="cn.wdn.obf.entity.Order">
+        	<id column="o_id" jdbcType="INTEGER" property="oId" />
+    		<result column="o_number" jdbcType="INTEGER" property="oNumber" />
+    		<result column="o_date" jdbcType="VARCHAR" property="oDate" />
+    		<result column="o_status" jdbcType="VARCHAR" property="oStatus" />
+        </collection>
+        <collection property="stores" ofType="cn.wdn.obf.entity.Store" >
+        	<id column="s_id" jdbcType="INTEGER" property="sId" />
+    		<result column="s_name" jdbcType="VARCHAR" property="sName" />
+    		<result column="s_desc" jdbcType="VARCHAR" property="sDesc" />
+    		<result column="s_point" jdbcType="INTEGER" property="sPoint" />
+    		<result column="s_allsale" jdbcType="DOUBLE" property="sAllsale" />
+    		<result column="s_status" jdbcType="INTEGER" property="sStatus" />
+    		<result column="s_img" jdbcType="VARCHAR" property="sImg" />
+    		<result column="s_certimg" jdbcType="VARCHAR" property="sCertimg" />
+        </collection>
+    </resultMap>
+    <insert id="insertUser"  parameterType="cn.wdn.obf.entity.User">
+        <!-- ignore 主键冲突，报错 -->
+        INSERT ignore INTO obfuser (u_account,u_pwd,u_name,u_street,u_address,u_phone,u_power)
+        VALUES (#{uAccount}, #{uPwd}, #{uName}, #{uStreet}, #{uAddress}, #{uPhone}, #{uPower})
+    </insert>
+    
+    <update id="updateUser" parameterType="cn.wdn.obf.entity.User">
+        UPDATE obfuser
+        SET u_account=#{uAccount},u_pwd=#{uPwd},u_name=#{uName},u_street=#{uStreet},u_address=#{uAddress},u_phone=#{uPhone},u_power=#{uPower}
+        WHERE
+            u_id = #{uId}
+    </update>
+    <update id="updatePwd" >
+        UPDATE obfuser
+        SET u_pwd=#{uPwd}
+        WHERE
+            u_id = #{uId}
+    </update>
+    <delete id="deleteUser" parameterType="int">
+        delete from obfuser where u_id=#{uId}
+    </delete>
+	<select id="queryAllUser"  resultMap="resultListUser">
+        select * from obfuser u,obfcomment co,obforder o,obfstore s ,obfcart ca
+         where  u_id=co_u_id and u_id=o_u_id and u_id=s_u_id and u_id=ca_u_id
+    </select>
+	<select id="queryUserById"  resultMap="resultListUser" parameterType="int">
+        select * from obfuser u,obfcomment co,obforder o,obfstore s ,obfcart ca
+         where  u_id=co_u_id and u_id=o_u_id and u_id=s_u_id and u_id=ca_u_id and u_id=#{id}
+    </select>
+	<select id="queryOnlyUserById"  resultMap="resultListUser" parameterType="int">
+        select * from obfuser u
+         where   u_id=#{uId}
+    </select>
+	<select id="queryUserByAc"  resultMap="resultListUser" parameterType="String">
+        select * from obfuser u
+         where u_account=#{account}
+    </select>
+	<select id="queryUserBySid"  resultMap="resultListUser">
+        select * from obfuser u ,obfstore s
+         where s.s_id=#{sId} and u.u_id = s.s_u_id
+    </select>
+	
+	
+</mapper>

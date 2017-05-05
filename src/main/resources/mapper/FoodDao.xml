@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wdn.obf.dao.FoodDAO">
+	
+ <resultMap type="Food" id="resultListFood">
+ 	<id property="fId" column="f_id"/>
+    <result column="f_name" jdbcType="VARCHAR" property="fName" />
+    <result column="f_desc" jdbcType="VARCHAR" property="fDesc" />
+    <result column="f_number" jdbcType="INTEGER" property="fNumber" />
+    <result column="f_price" jdbcType="DOUBLE" property="fPrice" />
+    <result column="f_s_id" jdbcType="INTEGER" property="fSid" />
+    <result column="f_img" jdbcType="VARCHAR" property="fImg" />
+    <association property="store" javaType="cn.wdn.obf.entity.Store">
+    	<id property="sId" column="s_id"/>
+    	<result column="s_name" jdbcType="VARCHAR" property="sName" />
+    	<result column="s_desc" jdbcType="VARCHAR" property="sDesc" />
+    	<result column="s_point" jdbcType="INTEGER" property="sPoint" />
+    	<result column="s_allsale" jdbcType="DOUBLE" property="sAllsale" />
+    	<result column="s_status" jdbcType="INTEGER" property="sStatus" />
+    	<result column="s_img" jdbcType="VARCHAR" property="sImg" />
+    	<result column="s_certimg" jdbcType="VARCHAR" property="sCertimg" />
+    </association>
+     
+  </resultMap>
+    <insert id="insertFood"  parameterType="cn.wdn.obf.entity.Food">
+        insert into obffood ( f_s_id, f_name, f_desc, f_number, f_price, f_img)
+    values ( #{fSid}, #{fName}, #{fDesc}, #{fNumber},  #{fPrice}, #{fImg})
+    </insert>	
+    
+    <update id="updateFood" parameterType="cn.wdn.obf.entity.Food">
+        update obffood
+    set  
+    	f_s_id = #{fSid},
+      f_name = #{fName},
+      f_desc = #{fDesc},
+      f_number = #{fNumber},
+      f_price = #{fPrice},
+      f_img = #{fImg}
+      where 
+            f_id = #{fId}
+    </update>
+    <delete id="deleteFood" parameterType="int">
+        delete from obffood where f_id=#{fId}
+    </delete>
+	<select id="queryAllFood"  resultMap="resultListFood">
+        select * from obfstore s,obffood f 
+        where   f.f_s_id=s.s_id 
+    </select>
+	<select id="queryFoodById"  resultMap="resultListFood">
+        select * from obffood f 
+        where   f.f_id = ${fId} 
+    </select>
+</mapper>

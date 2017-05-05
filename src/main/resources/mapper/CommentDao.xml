@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wdn.obf.dao.CommentDAO">
+	
+ <resultMap type="Comment" id="resultListComment">
+ 	<id property="coId" column="co_id"/>
+    <result column="co_u_id" jdbcType="INTEGER" property="coUid" />
+    <result column="co_o_id" jdbcType="INTEGER" property="coOid" />
+    <result column="co_content" jdbcType="VARCHAR" property="coContent" />
+    <result column="co_date" jdbcType="VARCHAR" property="coDate" />
+    <result column="co_point" jdbcType="INTEGER" property="coPoint" />
+    <association property="user" javaType="cn.wdn.obf.entity.User">
+    	 <id property="uId" column="u_id"/>
+    	 <result column="u_account" property="uAccount" />
+        <result column="u_pwd" property="uPwd" />
+        <result column="u_name" property="uName" />
+        <result column="u_street" property="uStreet" />
+        <result column="u_address" property="uAddress" />
+        <result column="u_phone" property="uPhone" />
+        <result column="u_power" property="uPower" />
+    </association>
+     <association property="order" javaType="cn.wdn.obf.entity.Order">
+     	<id property="oId" column="o_id"/>
+    	<result column="o_u_id" jdbcType="INTEGER" property="oUid" />
+    	<result column="o_s_id" jdbcType="INTEGER" property="oSid" />
+    	<result column="o_price" jdbcType="INTEGER" property="oPrice" />
+    	<result column="o_date" jdbcType="VARCHAR" property="oDate" />
+    	<result column="o_status" jdbcType="VARCHAR" property="oStatus" />
+    	<association property="store" javaType="cn.wdn.obf.entity.Store">
+    		<id property="sId" column="s_id"/>
+    		<result column="s_name" jdbcType="VARCHAR" property="sName" />
+    		<result column="s_desc" jdbcType="VARCHAR" property="sDesc" />
+    		<result column="s_point" jdbcType="INTEGER" property="sPoint" />
+    		<result column="s_allsale" jdbcType="DOUBLE" property="sAllsale" />
+    		<result column="s_status" jdbcType="INTEGER" property="sStatus" />
+    		<result column="s_img" jdbcType="VARCHAR" property="sImg" />
+    		<result column="s_certimg" jdbcType="VARCHAR" property="sCertimg" />
+    	</association>
+     </association>
+  </resultMap>
+    <insert id="insertComment"  parameterType="cn.wdn.obf.entity.Comment">
+        insert into obfcomment ( co_u_id, co_o_id, co_content, co_date,  co_point)
+    values ( #{coUid}, #{coOid}, #{coContent}, #{coDate},#{coPoint})
+    </insert>	
+    
+    <update id="updateComment" parameterType="cn.wdn.obf.entity.Comment">
+        update obfcomment
+    set  
+    	co_u_id = #{coUid},
+      co_o_id = #{coOid},
+      co_content = #{coContent},
+      co_date = #{coDate},
+      co_point = #{coPoint}
+      where 
+            co_id = #{coId}
+    </update>
+    <delete id="deleteComment" parameterType="int">
+        delete from obfcomment where co_id=#{coId}
+    </delete>
+	<select id="queryAllComment"  resultMap="resultListComment">
+        select * from obfuser u,obforder o ,obfcomment co 
+        where u.u_id = co.co_u_id and o.o_id=co.co_o_id 
+    </select>
+    <select id="queryCommentByOid"  resultMap="resultListComment">
+        select * from obfuser u,obforder o ,obfcomment co 
+        where u.u_id = co.co_u_id and o.o_id=co.co_o_id and o.o_id = ${oId}
+    </select>
+    <select id="queryCommentBySid"  resultMap="resultListComment">
+        select * from obfuser u,obforder o ,obfcomment co ,obfstore s
+        where u.u_id = co.co_u_id and o.o_id=co.co_o_id and o.o_s_id = s.s_id and s.s_id = ${sId}
+    </select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wdn.obf.dao.CartDAO">
+	
+ <resultMap type="Cart" id="resultListCart">
+ 	<id property="caId" column="ca_id"/>
+ 	<result column="ca_u_id" jdbcType="INTEGER" property="caUid" />
+    <result column="ca_f_id" jdbcType="INTEGER" property="caFid" />
+    <result column="ca_number" jdbcType="INTEGER" property="caNumber" />
+    <association property="user" javaType="cn.wdn.obf.entity.User">
+    	 <id property="uId" column="u_id"/>
+    	 <result column="u_account" property="uAccount" />
+        <result column="u_pwd" property="uPwd" />
+        <result column="u_name" property="uName" />
+        <result column="u_street" property="uStreet" />
+        <result column="u_address" property="uAddress" />
+        <result column="u_phone" property="uPhone" />
+        <result column="u_power" property="uPower" />
+    </association>
+     <association property="food" javaType="cn.wdn.obf.entity.Food">
+     	<id property="fId" column="f_id"/>
+     	<result column="f_name" jdbcType="VARCHAR" property="fName" />
+    	<result column="f_desc" jdbcType="VARCHAR" property="fDesc" />
+    	<result column="f_s_id" jdbcType="INTEGER" property="fSid" />
+    	<result column="f_number" jdbcType="INTEGER" property="fNumber" />
+    	<result column="f_price" jdbcType="DOUBLE" property="fPrice" />
+    	<result column="f_img" jdbcType="VARCHAR" property="fImg" />
+     </association>
+  </resultMap>
+    <insert id="insertCart"  parameterType="cn.wdn.obf.entity.Cart">
+        insert into obfcart ( ca_u_id, ca_f_id, ca_number)
+    values ( #{caUid}, #{caFid}, #{caNumber})
+    </insert>	
+    
+    <update id="updateCart" parameterType="cn.wdn.obf.entity.Cart">
+        update obfcart
+    set  ca_u_id = #{caUid},
+      ca_f_id = #{caFid},
+      ca_number = #{caNumber}
+      where 
+            ca_id = #{caId}
+    </update>
+    <update id="updateNumber" parameterType="cn.wdn.obf.entity.Cart">
+        update obfcart ca ,obffood f 
+    set  
+		f_number = f_number - ca_number
+	where 
+      	 ca.ca_f_id = f.f_id and ca_id = #{caId}
+    </update>
+    <delete id="deleteCart" parameterType="int">
+        delete from obfcart where ca_id=#{caId}
+    </delete>
+    <delete id="deleteCartByUid" parameterType="int">
+        delete from obfcart where ca_u_id=#{uId}
+    </delete>
+	<select id="queryAllCart"  resultMap="resultListCart">
+        select * from obfuser u,obffood f ,obfcart ca
+        where u.u_id = ca.ca_u_id and f.f_id=ca.ca_id 
+    </select>
+	<select id="queryCartByUid"  resultMap="resultListCart" parameterType="int">
+        select * from obfcart ca ,obffood f
+        where ca.ca_u_id = ${caId} and f.f_id= ca.ca_f_id
+    </select>
+</mapper>

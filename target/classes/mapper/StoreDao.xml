@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wdn.obf.dao.StoreDAO">
+	
+ <resultMap type="Store" id="resultListStore">
+ 	<id property="sId" column="s_id"/>
+    <result column="s_name" jdbcType="VARCHAR" property="sName" />
+    <result column="s_desc" jdbcType="VARCHAR" property="sDesc" />
+    <result column="s_point" jdbcType="INTEGER" property="sPoint" />
+    <result column="s_allsale" jdbcType="DOUBLE" property="sAllsale" />
+    <result column="s_status" jdbcType="INTEGER" property="sStatus" />
+    <result column="s_img" jdbcType="VARCHAR" property="sImg" />
+    <result column="s_u_id" jdbcType="INTEGER" property="sUid" />
+    <result column="s_certimg" jdbcType="VARCHAR" property="sCertimg" />
+    <result column="s_starttime" jdbcType="VARCHAR" property="sStarttime" />
+    <result column="s_endtime" jdbcType="VARCHAR" property="sEndtime" />
+    <result column="s_address" jdbcType="VARCHAR" property="sAddress" />
+    <association property="user" javaType="cn.wdn.obf.entity.User">
+    	 <id property="uId" column="u_id"/>
+    	 <result column="u_account" property="uAccount" />
+        <result column="u_pwd" property="uPwd" />
+        <result column="u_name" property="uName" />
+        <result column="u_street" property="uStreet" />
+        <result column="u_address" property="uAddress" />
+        <result column="u_phone" property="uPhone" />
+        <result column="u_power" property="uPower" />
+    </association>
+     <collection property="foods" ofType="cn.wdn.obf.entity.Food">
+     	<id property="fId" column="f_id"/>
+     	<result column="f_name" jdbcType="VARCHAR" property="fName" />
+    	<result column="f_desc" jdbcType="VARCHAR" property="fDesc" />
+    	<result column="f_number" jdbcType="INTEGER" property="fNumber" />
+    	<result column="f_price" jdbcType="DOUBLE" property="fPrice" />
+    	<result column="f_img" jdbcType="VARCHAR" property="fImg" />
+     </collection>
+  </resultMap>
+ <resultMap type="StoreResult" id="storeResult">
+    <result column="s_name" jdbcType="VARCHAR" property="name" />
+    <result column="s_allsale" jdbcType="DOUBLE" property="y" />
+   
+  </resultMap>
+    <insert id="insertStore"  parameterType="cn.wdn.obf.entity.Store">
+        insert into obfstore ( s_u_id, s_name, s_desc, s_point, 
+      s_allsale, s_status, s_img, s_certimg,s_starttime,s_endtime,s_address)
+    values ( #{sUid}, #{sName}, #{sDesc}, #{sPoint}, 
+      #{sAllsale}, #{sStatus}, #{sImg},#{sCertimg},#{sStarttime},#{sEndtime},#{sAddress})
+    </insert>	
+    
+    <update id="updateStore" parameterType="cn.wdn.obf.entity.Store">
+        update obfstore
+    set  s_u_id = #{sUid},
+      s_name = #{sName},
+      s_desc = #{sDesc},
+      s_point = #{sPoint},
+      s_allsale = #{sAllsale},
+      s_status = #{sStatus},
+      s_img = #{sImg},
+      s_certimg = #{sCertimg},
+      s_starttime = #{sStarttime},
+      s_endtime = #{sEndtime},
+      s_address = #{sAddress}
+      where 
+            s_id = #{sId}
+    </update>
+    <update id="changeStoreStatus" >
+        update obfstore
+    	set  
+     	 s_status = #{sStatus}
+     	 where 
+            s_id = #{sId}
+    </update>
+    <delete id="deleteStore" parameterType="int">
+        delete from obfstore where s_id=#{sId}
+    </delete>
+	<select id="queryAllStore"  resultMap="resultListStore">
+        select * from obfstore s
+         
+    </select>
+	<select id="queryStoreById"  resultMap="resultListStore">
+        select * from obfstore s , obffood f 
+        where  f_s_id = s_id and s_id = #{id}        
+    </select>
+	<select id="queryUserStore"  resultMap="resultListStore">
+        select * from obfstore s , obfuser u 
+        where  s.s_u_id = u.u_id and u.u_id = #{uId}        
+    </select>
+	<select id="queryOnlyStore"  resultMap="resultListStore">
+        select * from obfstore s 
+        where  s.s_id = #{sId}        
+    </select>
+	<select id="getUserStoreAllsaler"  resultMap="storeResult">
+        select s_name,s_allsale from obfstore s 
+        where  s.s_u_id = #{uId} and s.s_status=3       
+    </select>
+</mapper>
