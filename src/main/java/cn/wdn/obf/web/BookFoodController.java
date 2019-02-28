@@ -32,8 +32,12 @@ public class BookFoodController {
 	public String AllStore() throws Exception {
 		return "AllStore";
 	}
+	@RequestMapping(value = "/StoreManager", method = RequestMethod.GET)
+	public String StoreManager() throws Exception {
+		return "StoreManager";
+	}
 	/**
-	 * 获取所有商店
+	 * 获取所有店铺
 	 * @param user
 	 * @param session
 	 * @return
@@ -48,7 +52,7 @@ public class BookFoodController {
 		return json;
 	}
 	/**
-	 * 通过店铺id获得所属菜品
+	 * 根据店铺id获取食物
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -75,7 +79,7 @@ public class BookFoodController {
 		
 	}
 	/**
-	 * 添加购物车
+	 * 添加到购物车
 	 * @param cart
 	 * @param session
 	 * @return
@@ -93,6 +97,12 @@ public class BookFoodController {
 		}
 		return false;
 	}  
+	/**
+	 * 获取购物车内容
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/getCart", method = RequestMethod.GET)
 	@ResponseBody
 	public Object getCart(HttpSession session) throws Exception {
@@ -104,7 +114,7 @@ public class BookFoodController {
 			
 	}  
 	/**
-	 * 删除购物车项
+	 * 删除购物车内容
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -121,7 +131,7 @@ public class BookFoodController {
 		return false;
 	} 
 	/**
-	 * 结算
+	 * 购买
 	 * @param session
 	 * @param allPrice
 	 * @return
@@ -139,7 +149,7 @@ public class BookFoodController {
 		return false;
 	} 
 	/**
-	 * 获得用户所属订单
+	 * 鑾峰緱鐢ㄦ埛鎵�灞炶鍗�
 	 * @param session
 	 * @return
 	 * @throws Exception
@@ -154,7 +164,7 @@ public class BookFoodController {
 		return json;
 	}
 	/**
-	 * 添加评论和分数
+	 * 添加评论
 	 * @param session
 	 * @return
 	 * @throws Exception
@@ -183,7 +193,7 @@ public class BookFoodController {
 		return gson.toJson(store);
 	}
 	/**
-	 * 获取统计图数据
+	 * 获取用户订单价格
 	 * @param session
 	 * @return
 	 * @throws Exception

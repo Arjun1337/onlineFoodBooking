@@ -20,7 +20,7 @@ public class LoginController {
 	@Autowired
 	LoginService service;
 /**
- * æ‰¾å›å¯†ç  æœªå®ç°
+ * ÕÒ»ØÃÜÂë Î´ÊµÏÖ
  * @param email
  * @return
  */
@@ -39,7 +39,7 @@ public class LoginController {
 		return map;
 	}
 /**
- * é€€å‡º
+ * µÇ³ö
  * @param session
  * @return
  * @throws Exception
@@ -52,7 +52,7 @@ public String logout(HttpSession session) throws Exception {
    return "LoginHTML";
 }  
 /**
- * ç™»é™†
+ * µÇÂ½
  * @param user
  * @param session
  * @return
@@ -66,14 +66,13 @@ public boolean  checkUser(@ModelAttribute User user,HttpSession session) throws 
 		int uId = service.getUserId(user.getuAccount());
 		User dbUser = service.getUserById(uId);
 		session.setAttribute("userId", uId);
-		System.out.println(dbUser);
 		session.setAttribute("userName", dbUser.getuName());
 		return flag;
 	}
 	return flag;
 } 
 /**
- * å•†å®¶ç™»é™†
+ * ÉÌ¼ÒµÇÂ½
  * @param user
  * @param session
  * @return
@@ -95,7 +94,7 @@ public boolean salerLogin(@ModelAttribute User user,HttpSession session) throws 
 	return flag;
 }
 /**
- * ç®¡ç†å‘˜ç™»é™†
+ * ¹ÜÀíÔ±µÇÂ½
  * @param user
  * @param session
  * @return
@@ -117,7 +116,7 @@ public boolean adminLogin(@ModelAttribute User user,HttpSession session) throws 
 	return flag;
 }
 /**
- * æ³¨å†Œ 
+ * ×¢²á
  * @param user
  * @return
  * @throws Exception
@@ -129,7 +128,7 @@ public boolean register(@ModelAttribute User user) throws Exception {
 	return flag;
 } 
 /**
- * ç™»é™†ç•Œé¢
+ * »¶Ó­Ò³Ãæ
  * @param user
  * @param session
  * @return

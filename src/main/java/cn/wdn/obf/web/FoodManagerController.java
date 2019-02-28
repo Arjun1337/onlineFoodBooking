@@ -32,8 +32,14 @@ public class FoodManagerController {
 	Gson gson = new Gson();
 	@Autowired
 	FoodManagerService service;
+	@RequestMapping(value = "/FoodManagerInfo", method = RequestMethod.GET)
+	public Object FoodManagerInfo() throws Exception {
+		
+
+		return "FoodManagerInfo";
+	}	
 	/**
-	 * 获取用户所属店铺
+	 * 获取该用户旗下的店铺
 	 * @param user
 	 * @param session
 	 * @return
@@ -51,7 +57,7 @@ public class FoodManagerController {
 		return json;
 	}
 	/**
-	 * 删除菜品
+	 * 删除店铺的食物
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -66,7 +72,7 @@ public class FoodManagerController {
 		return false;
 	}
 	/**
-	 * 通过菜品对象更新菜品图片
+	 * 修改食物图片
 	 * @param food
 	 * @return
 	 * @throws Exception
@@ -76,15 +82,13 @@ public class FoodManagerController {
 	public boolean modifyFoodImg(@RequestParam("fId") int id,@RequestParam(value="Img",required=false) MultipartFile file,  
             HttpServletRequest request) throws Exception {
 		Food food = service.getFoodById(id);
-		//获得物理路径webapp所在路径  
+		//获取根目录
         String pathRoot = request.getSession().getServletContext().getRealPath("");  
         String path="";  
         if(!file.isEmpty()){  
-            //生成uuid作为文件名称  
+            //计算UID
             String uuid = UUID.randomUUID().toString().replaceAll("-","");  
-            //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
-            //获得文件后缀名称  
             String imageName=contentType.substring(contentType.indexOf("/")+1);  
             path="resources/images/store/"+uuid+"."+imageName; 
             File newFile = new File(pathRoot+path);
@@ -93,7 +97,6 @@ public class FoodManagerController {
             }
             file.transferTo(newFile);  
         }  
-        System.out.println(path);
         food.setfImg(path);
 		boolean flag = service.modifyFood(food);
 		if(flag){
@@ -102,7 +105,7 @@ public class FoodManagerController {
 		return false;
 	}
 	/**
-	 * 添加菜品
+	 * 店铺添加食物
 	 * @param food
 	 * @return
 	 * @throws Exception
@@ -111,15 +114,11 @@ public class FoodManagerController {
 	@ResponseBody
 	public boolean addFood(@ModelAttribute Food food,@RequestParam(value="Img",required=false) MultipartFile file,  
             HttpServletRequest request) throws Exception {
-		 //获得物理路径webapp所在路径  
         String pathRoot = request.getSession().getServletContext().getRealPath("");  
         String path="";  
         if(!file.isEmpty()){  
-            //生成uuid作为文件名称  
             String uuid = UUID.randomUUID().toString().replaceAll("-","");  
-            //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
-            //获得文件后缀名称  
             String imageName=contentType.substring(contentType.indexOf("/")+1);  
             path="resources/images/store/"+uuid+"."+imageName; 
             File newFile = new File(pathRoot+path);
@@ -128,7 +127,6 @@ public class FoodManagerController {
             }
             file.transferTo(newFile);  
         }  
-        System.out.println(path);
         food.setfImg(path);
 		boolean flag = service.addFood(food);
 		if(flag){
@@ -137,7 +135,7 @@ public class FoodManagerController {
 		return false;
 	}
 	/**
-	 * 获取店铺下订单
+	 * 获取店铺订单
 	 * @param session
 	 * @return
 	 * @throws Exception
@@ -152,7 +150,7 @@ public class FoodManagerController {
 		return json;
 	}
 	/**
-	 * 查询用户所属店铺的所有订单
+	 * 获取用户旗下店铺所有的订单
 	 * @param session
 	 * @return
 	 * @throws Exception
@@ -167,7 +165,7 @@ public class FoodManagerController {
 		return json;
 	}
 	/**
-	 * 改变订单状态
+	 * 修改订单状态
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -175,7 +173,6 @@ public class FoodManagerController {
 	@RequestMapping(value = "/changeStatus", method = RequestMethod.GET)
 	@ResponseBody
 	public boolean changeStatus(@RequestParam("oId") int id,@RequestParam("status") String status) throws Exception {
-		System.out.println(status);
 		boolean flag = service.changeStatus(status, id);
 		if(flag){
 			return true;
@@ -183,7 +180,7 @@ public class FoodManagerController {
 		return false;
 	}
 	/**
-	 * 获得店铺评论
+	 * 获取店铺的评论
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -198,7 +195,7 @@ public class FoodManagerController {
 		return json;
 	}
 	/**
-	 * 修改店铺资料
+	 * 修改店铺信息
 	 * @param store
 	 * @return
 	 * @throws Exception
@@ -216,7 +213,7 @@ public class FoodManagerController {
 		return flag;
 	}
 	/**
-	 * 修改food
+	 * 修改食物信息
 	 * @param food
 	 * @return
 	 * @throws Exception
@@ -248,15 +245,11 @@ public class FoodManagerController {
             HttpServletRequest request) throws Exception {
 		
 		Store store = service.getStoreById(sId);
-		//获得物理路径webapp所在路径  
         String pathRoot = request.getSession().getServletContext().getRealPath("");  
         String path="";  
         if(!file.isEmpty()){  
-            //生成uuid作为文件名称  
             String uuid = UUID.randomUUID().toString().replaceAll("-","");  
-            //获得文件类型（可以判断如果不是图片，禁止上传）  
             String contentType=file.getContentType();  
-            //获得文件后缀名称  
             String imageName=contentType.substring(contentType.indexOf("/")+1);  
             path="resources/images/store/"+uuid+"."+imageName; 
             File newFile = new File(pathRoot+path);
@@ -267,8 +260,6 @@ public class FoodManagerController {
         }  
         System.out.println(path);
         store.setsImg(path);
-//        store.setsName(sName);
-//        store.setsDesc(sDesc);
 		boolean flag = service.modifyStore(store);
 		if(flag){
 			return true;
@@ -276,7 +267,7 @@ public class FoodManagerController {
 		return false;
 	}
 	/**
-	 * 修改店铺状态
+	 * 修改店铺的运营状态
 	 * @param id
 	 * @param status
 	 * @return
@@ -300,7 +291,7 @@ public class FoodManagerController {
 		
 	}
 	/**
-	 * 添加店铺
+	 * 添加新店铺
 	 * @param store
 	 * @param status
 	 * @param file

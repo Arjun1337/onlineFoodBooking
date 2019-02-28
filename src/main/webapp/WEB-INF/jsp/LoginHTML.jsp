@@ -23,7 +23,6 @@
 	$(function(){
 	
 	$('#registerFrom').bind('valid.form', function(){
-	//disable the default form submission
         event.preventDefault();
         //grab all form data  
         var formData = new FormData($(this)[0]);
@@ -54,7 +53,6 @@ function login(){
 	
 	var account = $('#account').val();
 	var pwd = $("#pwd").val();
-//	location.href="login?uAccount="+account+"&uPwd="+pwd;
 	$.ajax({
 		type : "post",
 		url : "checkUser",
@@ -75,7 +73,6 @@ function salerLogin(){
 	
 	var account = $('#account').val();
 	var pwd = $("#pwd").val();
-//	location.href="login?uAccount="+account+"&uPwd="+pwd;
 	$.ajax({
 		type : "post",
 		url : "salerLogin",
@@ -87,7 +84,7 @@ function salerLogin(){
 				$("#errModal").modal("show");
 				
 			}else{
-			location.href="FoodManager";
+			location.href="FoodManagerInfo";
 			}
 		}
 	});
@@ -95,7 +92,6 @@ function salerLogin(){
 function adminLogin(){
 	var account = $('#account').val();
 	var pwd = $("#pwd").val();
-//	location.href="login?uAccount="+account+"&uPwd="+pwd;
 	$.ajax({
 		type : "post",
 		url : "adminLogin",

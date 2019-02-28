@@ -22,7 +22,7 @@ public class UserManagerController {
 	@Autowired
 	UserManagerService service;
 	/**
-	 * 閫氳繃鐢ㄦ埛id鑾峰緱鐢ㄦ埛涓汉璧勬枡
+	 * 获取用户信息
 	 * @param id
 	 * @return
 	 * @throws Exception
@@ -37,7 +37,7 @@ public class UserManagerController {
 		return json;
 	}
 	/**
-	 * 淇敼鐢ㄦ埛璧勬枡
+	 * 修改用户信息
 	 * @param user
 	 * @return
 	 * @throws Exception
@@ -50,7 +50,7 @@ public class UserManagerController {
 		return flag;
 	}
 	/**
-	 * 淇敼瀵嗙爜
+	 * 修改密码
 	 * @param session
 	 * @param oPwd
 	 * @param nPwd

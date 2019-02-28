@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mysql.jdbc.log.LogFactory;
+
 
 //登陆拦截器
 public class MyInterceptor implements HandlerInterceptor{ 
